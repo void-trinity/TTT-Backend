@@ -1,6 +1,6 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const axios = require('axios');
+const bodyParser = require('body-parser');
 
 const router = express.Router();
 
@@ -28,13 +28,13 @@ function arrayReducer(original) {
 }
 
 
-function getfrequency(text, n) {
-  const cleanText = text.replace(/[^a-zA-Z]/g, ' ').split(' ').filter(Boolean).sort();
-  const array = arrayReducer(cleanText);
+function countFrequency(text, n) {
+  const clean = text.replace(/[^a-zA-Z]/g, ' ').split(' ').filter(Boolean).sort();
+  const array = arrayReducer(clean);
   array.sort(function (a, b) {
     return (a.count < b.count) ? 1 : ((b.count < a.count) ? -1 : 0)} 
   );
-  let returnArray = [];
+  const returnArray = [];
   for (let i = 0; i < n; i++) {
     returnArray.push(array[i]);
   }
@@ -54,7 +54,7 @@ function getfrequency(text, n) {
 
 router.post('/api/count/', bodyParser.json(), async (req, res) => {
   const data = await axios.get('http://terriblytinytales.com/test.txt');
-  const result = getfrequency(data.data, req.body.N);
+  const result = countFrequency(data.data, req.body.N);
   res.status(200).json({
       data: result
   });
